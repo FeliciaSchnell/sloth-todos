@@ -1,4 +1,4 @@
-package se.meepo.recruitment.model;
+package se.meepo.sloth_todos.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

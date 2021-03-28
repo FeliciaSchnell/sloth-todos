@@ -1,10 +1,10 @@
-package se.meepo.recruitment;
+package se.meepo.sloth_todos;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import se.meepo.recruitment.model.Todo;
-import se.meepo.recruitment.model.Task;
+import se.meepo.sloth_todos.model.Todo;
+import se.meepo.sloth_todos.model.Task;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
