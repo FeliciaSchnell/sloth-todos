@@ -56,6 +56,7 @@ export default class App extends Vue {
     const data = {
         'title': todo.title,
         'description': todo.description,
+        'tasks': todo.tasks,
     }
     const setURL = todo.id < 0 ? this.url : `${this.url}/${todo.id}`;
 
@@ -91,12 +92,10 @@ export default class App extends Vue {
         id: -1,
         title: "",
         description: "",
+        tasks: [],
     };
-  }
+  } 
 }
-
-
-
 </script>
 
 <style lang="scss">

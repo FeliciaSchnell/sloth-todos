@@ -38,16 +38,6 @@ public class TodoController {
     }
 
     @RequestMapping(
-            value = "todos",
-            method = RequestMethod.POST,
-            consumes = "application/json"
-    )
-    @CrossOrigin(origins = "http://localhost:8080")
-    public void post(@RequestBody Todo todo) {
-        todoRepository.save(todo);
-    }
-
-    @RequestMapping(
             value = "todos/{id}",
             method = RequestMethod.GET,
             produces = "application/json"
@@ -67,6 +57,20 @@ public class TodoController {
     }
 
     @RequestMapping(
+        value = "todos",
+        method = RequestMethod.POST,
+        consumes = "application/json"
+    )
+    @CrossOrigin(origins = "http://localhost:8080")
+    public void post(@RequestBody Todo todo) {
+        todo = todoRepository.save(todo);
+        for (Task task : todo.tasks) {
+            task.todoId = todo.id;
+            tasksRepository.save(task);
+        } 
+    }
+
+    @RequestMapping(
             value = "todos/{id}",
             method = RequestMethod.PUT,
             consumes = "application/json"
@@ -75,6 +79,10 @@ public class TodoController {
     public void put(@PathVariable int id, @RequestBody Todo todo) {
         todo.id = id;
         todoRepository.save(todo);
+        for (Task task : todo.tasks) {
+            task.todoId = todo.id;
+            tasksRepository.save(task);
+        }
     }
 
     @RequestMapping(
