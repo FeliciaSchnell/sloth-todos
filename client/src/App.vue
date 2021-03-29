@@ -6,7 +6,7 @@
     </div>
     <div class="lowerSection">
       <List :data="listData" v-on:activeTodo="getActiveTodo($event)" v-on:newTodo="newTodo"/>
-      <InputSection v-if="currentTodo" :item="currentTodo" v-on:update="inputSectionUpdate"/>
+      <InputSection v-if="currentTodo" :item="currentTodo" v-on:update="inputSectionUpdate" v-on:taskDelete="setTask('DELETE', $event)"/>
       <div class="placeholder" v-if="!currentTodo">
         <img class="logo" src="@/assets/sloth.svg" />
         <div class="logoTxt">Sloth Todos</div>
@@ -24,6 +24,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Todo } from '@/utils/declarations.ts';
+import { Task } from '@/utils/declarations.ts';
 import  List from '@/components/List.vue'
 import  InputSection from '@/components/Todo.vue'
 @Component({
@@ -33,14 +34,14 @@ import  InputSection from '@/components/Todo.vue'
   },
 })
 export default class App extends Vue {
-  url = `http://localhost:8088/todos`;
+  url = `http://localhost:8088`;
   listData: Todo[] = [];
   currentTodo: Todo | null = null;
   saveActive = false;
   deleteActive = false;
 
   created() {
-    this.callAPI(this.url).then((data: Todo[]) => this.listData = data);
+    this.callAPI(`${this.url}/todos`).then((data: Todo[]) => this.listData = data);
   }
 
   async callAPI(goToURL: string): Promise<Todo[]> {
@@ -58,7 +59,7 @@ export default class App extends Vue {
         'description': todo.description,
         'tasks': todo.tasks,
     }
-    const setURL = todo.id < 0 ? this.url : `${this.url}/${todo.id}`;
+    const setURL = todo.id < 0 ? `${this.url}/todos` : `${this.url}/todos/${todo.id}`;
 
     if(request === 'DELETE') {
       this.currentTodo = null;
@@ -71,9 +72,28 @@ export default class App extends Vue {
     xhr.send(JSON.stringify(data));
   }
 
+  setTask(request: string, task: Task) {
+    console.log(request, task);
+    const xhr = new XMLHttpRequest();
+    const data = {
+        'name': task.name,
+        'completed': task.completed,
+    }
+    const setURL = task.id < 0 ? `${this.url}/tasks` : `${this.url}/tasks/${task.id}`;
+
+    if(request === 'DELETE') {
+      this.saveActive = false;
+      this.deleteActive = false;
+    }
+    xhr.addEventListener('load', this.endload);
+    xhr.open(request, setURL);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify(data));
+  }
+
   endload() {
     console.log('end load');
-    this.callAPI(this.url).then((data: Todo[]) => this.listData = data);
+    this.callAPI(`${this.url}/todos`).then((data: Todo[]) => this.listData = data);
   }
 
   getActiveTodo(item: number) {

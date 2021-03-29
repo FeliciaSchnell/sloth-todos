@@ -31,8 +31,8 @@ export default class InputSection extends Vue {
     }
     deleteTask(index: number) {
         console.log('deleteTask');
+        this.$emit('taskDelete', this.item.tasks[index]);
         this.item.tasks.splice(index, 1);
-        
     }
 }   
 </script>
