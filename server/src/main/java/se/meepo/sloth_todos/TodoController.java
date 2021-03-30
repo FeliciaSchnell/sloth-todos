@@ -19,22 +19,25 @@ public class TodoController {
     TaskRepository tasksRepository;
 
     @RequestMapping(
-            value = "todos",
-            method = RequestMethod.GET,
-            produces = "application/json"
+        value = "todos",
+        method = RequestMethod.GET,
+        produces = "application/json"
     )
     @CrossOrigin(origins = "http://localhost:8080")
     public List<Todo> get() {
-        List<Todo> todos = new ArrayList<>();
-        for (Todo todo : todoRepository.findAll()) {
-            for (Task task : tasksRepository.findAll()) {
+        List<Todo> result = new ArrayList<>();
+        List<Todo> todos = (List<Todo>) todoRepository.findAll();
+        List<Task> tasks = (List<Task>) tasksRepository.findAll();
+        
+        for (Todo todo : todos) {
+            for (Task task : tasks) {
                 if (todo.id == task.todoId) {
                     todo.tasks.add(task);
                 }
             }
-            todos.add(todo);
+            result.add(todo);
         }
-        return todos;
+        return result;
     }
 
     @RequestMapping(
