@@ -17,13 +17,14 @@ public class TodoController {
     TodoRepository todoRepository;
     @Inject
     TaskRepository tasksRepository;
+    private static final String allowedRequestOrigin = "http://localhost:8080"; 
 
     @RequestMapping(
         value = "todos",
         method = RequestMethod.GET,
         produces = "application/json"
     )
-    @CrossOrigin(origins = "http://localhost:8080")
+    @CrossOrigin(origins = allowedRequestOrigin)
     public List<Todo> get() {
         List<Todo> result = new ArrayList<>();
         List<Todo> todos = (List<Todo>) todoRepository.findAll();
@@ -45,7 +46,7 @@ public class TodoController {
             method = RequestMethod.GET,
             produces = "application/json"
     )
-    @CrossOrigin(origins = "http://localhost:8080")
+    @CrossOrigin(origins = allowedRequestOrigin)
     public Todo get(@PathVariable int id) {
         return todoRepository.findById(id)
                 .map(todo -> {
@@ -64,7 +65,7 @@ public class TodoController {
         method = RequestMethod.POST,
         consumes = "application/json"
     )
-    @CrossOrigin(origins = "http://localhost:8080")
+    @CrossOrigin(origins = allowedRequestOrigin)
     public void post(@RequestBody Todo todo) {
         todo = todoRepository.save(todo);
         for (Task task : todo.tasks) {
@@ -78,7 +79,7 @@ public class TodoController {
             method = RequestMethod.PUT,
             consumes = "application/json"
     )
-    @CrossOrigin(origins = "http://localhost:8080")
+    @CrossOrigin(origins = allowedRequestOrigin)
     public void put(@PathVariable int id, @RequestBody Todo todo) {
         todo.id = id;
         todoRepository.save(todo);
@@ -92,7 +93,7 @@ public class TodoController {
             value = "todos/{id}",
             method = RequestMethod.DELETE
     )
-    @CrossOrigin(origins = "http://localhost:8080")
+    @CrossOrigin(origins = allowedRequestOrigin)
     public void delete(@PathVariable int id) {
         todoRepository.deleteById(id);
     }

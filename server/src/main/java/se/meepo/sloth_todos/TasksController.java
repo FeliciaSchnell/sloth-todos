@@ -12,13 +12,14 @@ public class TasksController {
 
     @Inject
     TaskRepository tasksRepository;
+    private static final String allowedRequestOrigin = "http://localhost:8080"; 
 
     @RequestMapping(
             value = "tasks/member/{memberId}",
             method = RequestMethod.GET,
             produces = "application/json"
     )
-    @CrossOrigin(origins = "http://localhost:8080")
+    @CrossOrigin(origins = allowedRequestOrigin)
     public List<Task> get(@PathVariable int memberId) {
         List<Task> result = new ArrayList<>();
         List<Task> tasks = (List<Task>) tasksRepository.findAll();
@@ -35,7 +36,7 @@ public class TasksController {
             method = RequestMethod.POST,
             consumes = "application/json"
     )
-    @CrossOrigin(origins = "http://localhost:8080")
+    @CrossOrigin(origins = allowedRequestOrigin)
     public void post(@RequestBody Task task) {
         tasksRepository.save(task);
     }
@@ -45,7 +46,7 @@ public class TasksController {
             method = RequestMethod.PUT,
             consumes = "application/json"
     )
-    @CrossOrigin(origins = "http://localhost:8080")
+    @CrossOrigin(origins = allowedRequestOrigin)
     public void put(@PathVariable int id, @RequestBody Task task) {
         task.id = id;
         tasksRepository.save(task);
@@ -55,7 +56,7 @@ public class TasksController {
             value = "tasks/{id}",
             method = RequestMethod.DELETE
     )
-    @CrossOrigin(origins = "http://localhost:8080")
+    @CrossOrigin(origins = allowedRequestOrigin)
     public void delete(@PathVariable int id) {
         tasksRepository.deleteById(id);
     }
