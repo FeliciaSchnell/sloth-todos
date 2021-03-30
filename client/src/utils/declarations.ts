@@ -3,6 +3,7 @@ export type Todo = {
     id: number;
     title: string;
     tasks: Task[];
+    completed: boolean;
 }
 export type Task = {
     id: number;

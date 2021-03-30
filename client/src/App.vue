@@ -41,7 +41,7 @@ export default class App extends Vue {
   deleteActive = false;
 
   created() {
-    this.callAPI(`${this.url}/todos`).then((data: Todo[]) => this.listData = data);
+    this.updateFromDatabase();
   }
 
   async callAPI(goToURL: string): Promise<Todo[]> {
@@ -85,7 +85,7 @@ export default class App extends Vue {
       this.saveActive = false;
       this.deleteActive = false;
     }
-    xhr.addEventListener('load', this.endload);
+    xhr.addEventListener('load', this.updateFromDatabase);
     xhr.open(request, setURL);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify(data));
@@ -93,7 +93,25 @@ export default class App extends Vue {
 
   endload() {
     console.log('end load');
-    this.callAPI(`${this.url}/todos`).then((data: Todo[]) => this.listData = data);
+    this.updateFromDatabase();
+  }
+
+  updateFromDatabase() {
+    console.log("update");
+    this.callAPI(`${this.url}/todos`).then((data: Todo[]) => {
+      data.forEach(todo => {
+        if(todo.tasks.length === 0) {
+          return;
+        }
+        for(let i = 0; i < todo.tasks.length; i++) {
+          if(!todo.tasks[i].completed) {
+            return;
+          }
+        }
+        todo.completed = true;  
+      });
+      this.listData = data 
+    });
   }
 
   getActiveTodo(item: number) {
@@ -112,6 +130,7 @@ export default class App extends Vue {
         id: -1,
         title: "",
         description: "",
+        completed: false,
         tasks: [],
     };
   } 
