@@ -4,12 +4,31 @@ import org.springframework.web.bind.annotation.*;
 import se.meepo.sloth_todos.model.Task;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class TasksController {
 
     @Inject
     TaskRepository tasksRepository;
+
+    @RequestMapping(
+            value = "tasks/member/{memberId}",
+            method = RequestMethod.GET,
+            produces = "application/json"
+    )
+    @CrossOrigin(origins = "http://localhost:8080")
+    public List<Task> get(@PathVariable int memberId) {
+        List<Task> result = new ArrayList<>();
+        List<Task> tasks = (List<Task>) tasksRepository.findAll();
+        for (Task task : tasks) {
+            if (memberId == task.memberId) {
+                result.add(task);
+            }  
+        }  
+        return result;
+    }
 
     @RequestMapping(
             value = "tasks",
