@@ -48,12 +48,14 @@ export default class InputSection extends Vue {
     .title {
         height: 64px;
         border: none;
+        border-bottom: 1px solid $action;
         font-size: 36px;
+        margin-right: 100px;
     }
     .description {
-        /* flex: 1; */
-        border: none;
-        padding: $l $xxl ($xxl * 2)  0 ;
+        border: 0,5px solid;
+        padding: $xs $xxl ($xxl * 2) $xs ;
+        margin: 30px 150px 0 0;
     }
     .title:focus,
     .description:focus {
