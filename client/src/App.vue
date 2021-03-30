@@ -63,9 +63,10 @@ export default class App extends Vue {
 
     if(request === 'DELETE') {
       this.currentTodo = null;
-      this.saveActive = false;
       this.deleteActive = false;
     }
+
+    this.saveActive = false;
     xhr.addEventListener('load', this.endload);
     xhr.open(request, setURL);
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -83,7 +84,6 @@ export default class App extends Vue {
 
     if(request === 'DELETE') {
       this.saveActive = false;
-      this.deleteActive = false;
     }
     xhr.addEventListener('load', this.updateFromDatabase);
     xhr.open(request, setURL);
